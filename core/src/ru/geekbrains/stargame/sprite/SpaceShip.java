@@ -1,5 +1,6 @@
 package ru.geekbrains.stargame.sprite;
 
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
@@ -19,8 +20,8 @@ public class SpaceShip extends Sprite {
     private boolean isKeyPressed;
     private boolean isTouched;
 
-    public SpaceShip(TextureRegion region) {
-        super(region);
+    public SpaceShip(TextureAtlas atlas) {
+        super(atlas.findRegion("starfighter"));
         v = new Vector2();
         touch = new Vector2();
         buf = new Vector2();

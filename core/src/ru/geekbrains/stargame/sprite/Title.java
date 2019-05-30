@@ -13,8 +13,8 @@ public class Title extends Sprite {
     }
 
     @Override
-    public void resize(Rect wordBounds) {
-        setTop(wordBounds.getTop() - 0.12f);
+    public void resize(Rect worldBounds) {
+        setTop(worldBounds.getTop() - 0.12f);
         setHeightProportion(0.45f);
     }
 }

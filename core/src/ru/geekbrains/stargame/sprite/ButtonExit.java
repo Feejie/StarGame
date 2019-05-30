@@ -15,9 +15,9 @@ public class ButtonExit extends ScaledTouchButton {
     }
 
     @Override
-    public void resize(Rect wordBounds) {
-        setRight(wordBounds.getRight() - 0.02f);
-        setTop(wordBounds.getTop() - 0.02f);
+    public void resize(Rect worldBounds) {
+        setRight(worldBounds.getRight() - 0.02f);
+        setTop(worldBounds.getTop() - 0.02f);
     }
 
     @Override

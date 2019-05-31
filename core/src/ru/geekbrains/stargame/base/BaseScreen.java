@@ -81,7 +81,6 @@ public abstract class BaseScreen implements Screen, InputProcessor {
         batch.dispose();
     }
 
-
     @Override
     public boolean keyDown(int keycode) {
         return false;
@@ -105,7 +104,6 @@ public abstract class BaseScreen implements Screen, InputProcessor {
     }
 
     public boolean touchDown(Vector2 touch, int pointer) {
-        System.out.println("touchDown touchX = " + touch.x + " touchY = " + touch.y);
         return false;
     }
 
@@ -117,7 +115,6 @@ public abstract class BaseScreen implements Screen, InputProcessor {
     }
 
     public boolean touchUp(Vector2 touch, int pointer) {
-        System.out.println("touchUp touchX = " + touch.x + " touchY = " + touch.y);
         return false;
     }
 
@@ -129,7 +126,6 @@ public abstract class BaseScreen implements Screen, InputProcessor {
     }
 
     public boolean touchDragged(Vector2 touch, int pointer) {
-//        System.out.println("touchDragged touchX = " + touch.x + " touchY = " + touch.y);
         return false;
     }
 

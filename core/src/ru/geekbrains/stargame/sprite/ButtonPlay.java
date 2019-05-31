@@ -18,8 +18,8 @@ public class ButtonPlay extends ScaledTouchButton {
     }
 
     @Override
-    public void resize(Rect wordBounds) {
-        setBottom(wordBounds.getBottom() + 0.15f);
+    public void resize(Rect worldBounds) {
+        setBottom(worldBounds.getBottom() + 0.15f);
     }
 
     @Override

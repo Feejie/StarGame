@@ -9,12 +9,14 @@ import com.badlogic.gdx.math.Vector2;
 
 import ru.geekbrains.stargame.base.BaseScreen;
 import ru.geekbrains.stargame.math.Rect;
+import ru.geekbrains.stargame.pool.BulletPool;
 import ru.geekbrains.stargame.sprite.Background;
 import ru.geekbrains.stargame.sprite.SpaceShip;
 import ru.geekbrains.stargame.sprite.Star;
 
-public class GameScreen extends BaseScreen {
+import static ru.geekbrains.stargame.screen.MenuScreen.music;
 
+public class GameScreen extends BaseScreen {
     private static final int STAR_COUNT = 100;
 
     private TextureAtlas atlas;
@@ -24,22 +26,26 @@ public class GameScreen extends BaseScreen {
     private Star[] starArray;
     private SpaceShip spaceShip;
 
+    private BulletPool bulletPool;
+
     @Override
     public void show() {
         super.show();
         atlas = new TextureAtlas("textures/sgStarter.pack");
         bg = new Texture("textures/blackCells2Bg800.jpg");
         background = new Background(new TextureRegion(bg));
-        spaceShip = new SpaceShip(atlas);
         starArray = new Star[STAR_COUNT];
         for (int i = 0; i < STAR_COUNT; i++) {
             starArray[i] = new Star(atlas);
         }
+        bulletPool = new BulletPool();
+        spaceShip = new SpaceShip(atlas, bulletPool);
     }
 
     @Override
     public void render(float delta) {
         update(delta);
+        freeAllDestroyedActiveObjects();
         draw();
     }
 
@@ -48,6 +54,11 @@ public class GameScreen extends BaseScreen {
         for (Star star: starArray) {
             star.update(delta);
         }
+        bulletPool.updateActiveSprites(delta);
+    }
+
+    private void freeAllDestroyedActiveObjects() {
+        bulletPool.freeAllDestroyedActiveSprites();
     }
 
     private void draw() {
@@ -59,6 +70,7 @@ public class GameScreen extends BaseScreen {
         for (Star star: starArray) {
             star.draw(batch);
         }
+        bulletPool.drawActiveSprites(batch);
         batch.end();
     }
 
@@ -76,6 +88,8 @@ public class GameScreen extends BaseScreen {
     public void dispose() {
         bg.dispose();
         atlas.dispose();
+        bulletPool.dispose();
+        music.dispose();
         super.dispose();
     }
 
@@ -87,7 +101,8 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public boolean touchUp(Vector2 touch, int pointer) {
-        return super.touchUp(touch, pointer);
+        spaceShip.touchUp(touch, pointer);
+        return false;
     }
 
     @Override

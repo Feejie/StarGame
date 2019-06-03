@@ -19,7 +19,7 @@ import ru.geekbrains.stargame.sprite.Title;
 
 public class MenuScreen extends BaseScreen {
 
-    protected static final Music music = Gdx.audio.newMusic(Gdx.files.internal("sounds/music.mp3"));
+//    protected static final Music music = Gdx.audio.newMusic(Gdx.files.internal("sounds/menu.mp3"));
 
     private static final int STAR_COUNT = 100;
 
@@ -41,6 +41,10 @@ public class MenuScreen extends BaseScreen {
     @Override
     public void show() {
         super.show();
+        this.music = Gdx.audio.newMusic(Gdx.files.internal("sounds/menu.mp3"));
+        music.setVolume(0.3f);
+        music.play();
+        music.setLooping(true);
         atlas = new TextureAtlas("textures/sgStarter.pack");
         bg = new Texture("textures/blackCells2Bg800.jpg");
         background = new Background(new TextureRegion(bg));
@@ -51,10 +55,6 @@ public class MenuScreen extends BaseScreen {
         }
         buttonPlay = new ButtonPlay(atlas, game);
         buttonExit = new ButtonExit(atlas);
-
-        music.setVolume(0.7f);
-        music.play();
-        music.setLooping(true);
     }
 
     @Override
@@ -88,6 +88,7 @@ public class MenuScreen extends BaseScreen {
     public void dispose() {
         bg.dispose();
         atlas.dispose();
+        music.dispose();
         super.dispose();
     }
 

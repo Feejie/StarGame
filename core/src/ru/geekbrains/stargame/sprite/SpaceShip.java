@@ -1,27 +1,16 @@
 package ru.geekbrains.stargame.sprite;
 
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
-import ru.geekbrains.stargame.base.Sprite;
 import ru.geekbrains.stargame.math.Rect;
 import ru.geekbrains.stargame.pool.BulletPool;
 
-public class SpaceShip extends Sprite {
+public class SpaceShip extends Ship {
 
     private static final int INVALID_POINTER = -1;
-
-    private BulletPool bulletPool;
-    private TextureRegion bulletRegion;
-
-    private Vector2 v;
-    private final Vector2 v0;
-    private Vector2 bulletV;
-    private Vector2 bulletPos;
-
-    private Rect worldBounds;
 
     private boolean pressedLeft;
     private boolean pressedRight;
@@ -29,21 +18,22 @@ public class SpaceShip extends Sprite {
     private int leftPointer = INVALID_POINTER;
     private int rightPointer = INVALID_POINTER;
 
-    private float timer;
-
-    public SpaceShip(TextureAtlas atlas, BulletPool bulletPool) {
+    public SpaceShip(TextureAtlas atlas, BulletPool bulletPool, Sound bulletSound) {
         super(atlas.findRegion("starfighter"));
         this.bulletPool = bulletPool;
         this.bulletRegion = atlas.findRegion("fireball");
         v = new Vector2();
         v0 = new Vector2(0.5f, 0);
         bulletV = new Vector2(0, 0.5f);
-        bulletPos = new Vector2();
+        this.reloadInterval = 0.2f;
+        this.bulletHeight = 0.01f;
+        this.damage = 1;
+        this.bulletSound = bulletSound;
+        this.hp = 100;
     }
 
     public void update(float delta) {
         super.update(delta);
-        pos.mulAdd(v, delta);
         if (getRight() > worldBounds.getRight()) {
             setRight(worldBounds.getRight());
             stop();
@@ -51,18 +41,11 @@ public class SpaceShip extends Sprite {
             setLeft(worldBounds.getLeft());
             stop();
         }
-
-        // выстрел каждые 0.2 сек(+-)
-        timer += delta;
-        if (timer > 0.2) {
-            shoot();
-            timer -= 0.2;
-        }
     }
 
     @Override
     public void resize(Rect worldBounds) {
-        this.worldBounds = worldBounds;
+        super.resize(worldBounds);
         setHeightProportion(0.1f);
         setBottom(worldBounds.getBottom() + 0.04f);
     }
@@ -153,14 +136,6 @@ public class SpaceShip extends Sprite {
 
     private void stop() {
         v.setZero();
-    }
-
-    private void shoot() {
-        Bullet bullet = bulletPool.obtain();
-        bulletPos.set(pos);
-        bulletPos.y += getHalfHeight();
-        bullet.set(this, bulletRegion, bulletPos, bulletV,
-                0.01f, worldBounds, 1);
     }
 
 }

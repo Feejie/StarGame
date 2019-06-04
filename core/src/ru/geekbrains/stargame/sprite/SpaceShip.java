@@ -138,4 +138,12 @@ public class SpaceShip extends Ship {
         v.setZero();
     }
 
+    @Override
+    protected void shoot() {
+        super.shoot();
+        bulletPos = new Vector2(pos.x, pos.y + getHalfHeight());
+        Bullet bullet = bulletPool.obtain();
+        bullet.set(this, bulletRegion, bulletPos, bulletV,
+                bulletHeight, worldBounds, damage);
+    }
 }

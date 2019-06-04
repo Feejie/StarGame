@@ -15,7 +15,6 @@ import ru.geekbrains.stargame.pool.EnemyPool;
 import ru.geekbrains.stargame.pool.ExplosionPool;
 import ru.geekbrains.stargame.sprite.Background;
 import ru.geekbrains.stargame.sprite.Explosion;
-import ru.geekbrains.stargame.sprite.Ship;
 import ru.geekbrains.stargame.sprite.SpaceShip;
 import ru.geekbrains.stargame.sprite.Star;
 import ru.geekbrains.stargame.utils.EnemyGenerator;
@@ -92,7 +91,7 @@ public class GameScreen extends BaseScreen {
         for (int i = 0; i < enemyPool.getActiveObjects().size(); i++) {
             if (!spaceShip.isOutside(enemyPool.getActiveObjects().get(i))) {
                 explosion = explosionPool.obtain();
-                explosion.set(0.15f, enemyPool.getActiveObjects().get(i).pos);
+                explosion.set(enemyPool.getActiveObjects().get(i).getHeight(), enemyPool.getActiveObjects().get(i).pos);            //
                 enemyPool.getActiveObjects().remove(enemyPool.getActiveObjects().get(i));
             }
         }

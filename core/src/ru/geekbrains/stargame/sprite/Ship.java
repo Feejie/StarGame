@@ -16,6 +16,7 @@ public abstract class Ship extends Sprite {
     protected Vector2 v;
     protected Vector2 v0;
     protected Vector2 bulletV;
+    protected Vector2 bulletPos;
     protected float bulletHeight;
 
     protected Rect worldBounds;
@@ -56,10 +57,7 @@ public abstract class Ship extends Sprite {
         this.worldBounds = worldBounds;
     }
 
-    private void shoot() {
+    protected void shoot() {
         bulletSound.play(0.02f);
-        Bullet bullet = bulletPool.obtain();
-        bullet.set(this, bulletRegion, pos, bulletV,
-                bulletHeight, worldBounds, damage);
     }
 }

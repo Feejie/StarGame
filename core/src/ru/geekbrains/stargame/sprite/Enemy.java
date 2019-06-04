@@ -63,4 +63,13 @@ public class Enemy extends Ship {
         this.v.set(v0);
         this.vBuf = v;
     }
+
+    @Override
+    protected void shoot() {
+        super.shoot();
+        bulletPos = new Vector2(pos.x, pos.y - getHalfHeight());
+        Bullet bullet = bulletPool.obtain();
+        bullet.set(this, bulletRegion, bulletPos, bulletV,
+                bulletHeight, worldBounds, damage);
+    }
 }

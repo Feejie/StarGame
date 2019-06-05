@@ -13,7 +13,7 @@ public class Star extends Sprite {
     private Rect worldBounds;
 
     public Star(TextureAtlas atlas) {
-        super(atlas.findRegion("star" + ((int) (Math.random() * 5) + 1)));
+        super(atlas.findRegion("star" + Rnd.nextInt(1, 6)));
         float vX = Rnd.nextFloat(-0.005f, 0.005f);
         float vY = Rnd.nextFloat(-0.5f, -0.1f);
         v = new Vector2(vX, vY);

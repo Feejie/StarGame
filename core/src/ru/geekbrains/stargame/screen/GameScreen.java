@@ -17,8 +17,8 @@ import ru.geekbrains.stargame.pool.EnemyPool;
 import ru.geekbrains.stargame.pool.ExplosionPool;
 import ru.geekbrains.stargame.sprite.Background;
 import ru.geekbrains.stargame.sprite.Bullet;
+import ru.geekbrains.stargame.sprite.ButtonRetry;
 import ru.geekbrains.stargame.sprite.Enemy;
-import ru.geekbrains.stargame.sprite.Explosion;
 import ru.geekbrains.stargame.sprite.MessageGameOver;
 import ru.geekbrains.stargame.sprite.SpaceShip;
 import ru.geekbrains.stargame.sprite.Star;
@@ -28,7 +28,7 @@ public class GameScreen extends BaseScreen {
 
     private static final int STAR_COUNT = 100;
 
-    private enum State { PLAYING, PAUSE, GAME_OVER }
+    public enum State { PLAYING, PAUSE, GAME_OVER, NEW_GAME }
 
     private TextureAtlas atlas;
     private Texture bg;
@@ -50,6 +50,7 @@ public class GameScreen extends BaseScreen {
     private EnemyGenerator enemyGenerator;
 
     private MessageGameOver messageGameOver;
+    private ButtonRetry buttonRetry;
 
     @Override
     public void show() {
@@ -68,12 +69,13 @@ public class GameScreen extends BaseScreen {
         for (int i = 0; i < STAR_COUNT; i++) {
             starArray[i] = new Star(atlas);
         }
-        bulletPool = new BulletPool();
         explosionPool = new ExplosionPool(atlas, explosionSound);
-        spaceShip = new SpaceShip(atlas, bulletPool, explosionPool, laserSound);
+        bulletPool = new BulletPool();
+        spaceShip = new SpaceShip(atlas, bulletPool, explosionPool, laserSound, worldBounds);       // worldBounds
         enemyPool = new EnemyPool(bulletPool, explosionPool, rocketSound, worldBounds, spaceShip);
         enemyGenerator = new EnemyGenerator(worldBounds, enemyPool, atlas);
         messageGameOver = new MessageGameOver(atlas);
+        buttonRetry = new ButtonRetry(atlas,this);
         state = State.PLAYING;
     }
 
@@ -110,6 +112,14 @@ public class GameScreen extends BaseScreen {
             star.update(delta);
         }
         explosionPool.updateActiveSprites(delta);
+        if (state == State.NEW_GAME) {
+            bulletPool = new BulletPool();
+            spaceShip = new SpaceShip(atlas, bulletPool, explosionPool, laserSound, worldBounds);
+            spaceShip.resize(worldBounds);
+            enemyPool = new EnemyPool(bulletPool, explosionPool, rocketSound, worldBounds, spaceShip);
+            enemyGenerator = new EnemyGenerator(worldBounds, enemyPool, atlas);
+            state = State.PLAYING;
+        }
         if (state == State.PLAYING) {
             spaceShip.update(delta);
             bulletPool.updateActiveSprites(delta);
@@ -179,6 +189,7 @@ public class GameScreen extends BaseScreen {
             enemyPool.drawActiveSprites(batch);
         } else if (state == State.GAME_OVER) {
             messageGameOver.draw(batch);
+            buttonRetry.draw(batch);
         }
         batch.end();
     }
@@ -191,6 +202,7 @@ public class GameScreen extends BaseScreen {
         for (Star star: starArray) {
             star.resize(worldBounds);
         }
+        buttonRetry.resize(worldBounds);
     }
 
     @Override
@@ -211,6 +223,8 @@ public class GameScreen extends BaseScreen {
     public boolean touchDown(Vector2 touch, int pointer) {
         if (state == State.PLAYING) {
             spaceShip.touchDown(touch, pointer);
+        } else {
+            buttonRetry.touchDown(touch, pointer);
         }
         return false;
     }
@@ -219,6 +233,8 @@ public class GameScreen extends BaseScreen {
     public boolean touchUp(Vector2 touch, int pointer) {
         if (state == State.PLAYING) {
             spaceShip.touchUp(touch, pointer);
+        } else {
+            buttonRetry.touchUp(touch, pointer);
         }
         return false;
     }
@@ -239,4 +255,7 @@ public class GameScreen extends BaseScreen {
         return false;
     }
 
+    public void setState(State state) {
+        this.state = state;
+    }
 }

@@ -19,7 +19,9 @@ public class SpaceShip extends Ship {
     private int leftPointer = INVALID_POINTER;
     private int rightPointer = INVALID_POINTER;
 
-    public SpaceShip(TextureAtlas atlas, BulletPool bulletPool, ExplosionPool explosionPool, Sound bulletSound) {
+    private Rect worldBounds;
+
+    public SpaceShip(TextureAtlas atlas, BulletPool bulletPool, ExplosionPool explosionPool, Sound bulletSound, Rect worldBounds) {
         this.region = atlas.findRegion("starfighter");
         this.regionDamage = atlas.findRegion("starfighterDmg");
         this.regionBuff = region;
@@ -34,6 +36,8 @@ public class SpaceShip extends Ship {
         this.damage = 1;
         this.bulletSound = bulletSound;
         this.hp = 10;
+
+        this.worldBounds = worldBounds;
     }
 
     public void update(float delta) {

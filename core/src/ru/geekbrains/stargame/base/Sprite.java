@@ -12,6 +12,7 @@ public class Sprite extends Rect {
     protected float angle;
     protected float scale = 1f;
     protected TextureRegion[] regions;
+    protected TextureRegion region;
     protected int frame;
 
     private boolean isDestroyed;
@@ -22,6 +23,7 @@ public class Sprite extends Rect {
     public Sprite(TextureRegion region) {
         this.regions = new TextureRegion[1];
         this.regions[0] = region;
+        this.region = region;
     }
 
     public Sprite(TextureRegion region, int rows, int cols, int frames) {
@@ -29,14 +31,25 @@ public class Sprite extends Rect {
     }
 
     public void draw(SpriteBatch batch) {
-        batch.draw(
-                regions[frame],
-                getLeft(), getBottom(),
-                halfWidth, halfHeight,
-                getWidth(), getHeight(),
-                scale, scale,
-                angle
-        );
+        if (regions != null) {
+            batch.draw(
+                    regions[frame],
+                    getLeft(), getBottom(),
+                    halfWidth, halfHeight,
+                    getWidth(), getHeight(),
+                    scale, scale,
+                    angle
+            );
+        } else {
+            batch.draw(
+                    region,
+                    getLeft(), getBottom(),
+                    halfWidth, halfHeight,
+                    getWidth(), getHeight(),
+                    scale, scale,
+                    angle
+            );
+        }
     }
 
     public void update(float delta) {
@@ -49,8 +62,7 @@ public class Sprite extends Rect {
 
     public void setHeightProportion(float height) {
         setHeight(height);
-        float aspect = regions[frame].getRegionWidth() / (float) regions[frame].getRegionHeight();
-        setWidth(height * aspect);
+        setWidth(height);
     }
 
     public boolean touchDown(Vector2 touch, int pointer) {

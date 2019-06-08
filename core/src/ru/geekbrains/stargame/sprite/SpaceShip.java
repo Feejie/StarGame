@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import ru.geekbrains.stargame.math.Rect;
 import ru.geekbrains.stargame.pool.BulletPool;
+import ru.geekbrains.stargame.pool.ExplosionPool;
 
 public class SpaceShip extends Ship {
 
@@ -18,9 +19,14 @@ public class SpaceShip extends Ship {
     private int leftPointer = INVALID_POINTER;
     private int rightPointer = INVALID_POINTER;
 
-    public SpaceShip(TextureAtlas atlas, BulletPool bulletPool, Sound bulletSound) {
-        super(atlas.findRegion("starfighter"));
+    private Rect worldBounds;
+
+    public SpaceShip(TextureAtlas atlas, BulletPool bulletPool, ExplosionPool explosionPool, Sound bulletSound, Rect worldBounds) {
+        this.region = atlas.findRegion("starfighter");
+        this.regionDamage = atlas.findRegion("starfighterDmg");
+        this.regionBuff = region;
         this.bulletPool = bulletPool;
+        this.explosionPool = explosionPool;
         this.bulletRegion = atlas.findRegion("fireball");
         v = new Vector2();
         v0 = new Vector2(0.5f, 0);
@@ -29,11 +35,18 @@ public class SpaceShip extends Ship {
         this.bulletHeight = 0.01f;
         this.damage = 1;
         this.bulletSound = bulletSound;
-        this.hp = 100;
+        this.hp = 10;
+
+        this.worldBounds = worldBounds;
     }
 
     public void update(float delta) {
         super.update(delta);
+        reloadTimer += delta;
+        if (reloadTimer > reloadInterval) {
+            reloadTimer -= reloadInterval;
+            shoot();
+        }
         if (getRight() > worldBounds.getRight()) {
             setRight(worldBounds.getRight());
             stop();
@@ -145,5 +158,14 @@ public class SpaceShip extends Ship {
         Bullet bullet = bulletPool.obtain();
         bullet.set(this, bulletRegion, bulletPos, bulletV,
                 bulletHeight, worldBounds, damage);
+    }
+
+    public boolean isBulletCollision(Rect bullet) {
+        return !(
+                bullet.getRight() < getLeft()
+                || bullet.getLeft() > getRight()
+                || bullet.getBottom() > pos.y
+                || bullet.getTop() < getBottom()
+                );
     }
 }

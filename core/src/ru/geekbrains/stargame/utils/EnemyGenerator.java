@@ -23,7 +23,7 @@ public class EnemyGenerator {
     private static final float ENEMY_MEDIUM_BULLET_VY = -0.25f;
     private static final int ENEMY_MEDIUM_BULLET_DAMAGE = 5;
     private static final float ENEMY_MEDIUM_RELOAD_INTERVAL = 4f;
-    private static final int ENEMY_MEDIUM_HP = 1;
+    private static final int ENEMY_MEDIUM_HP = 5;
 
     private static final float ENEMY_BIG_HEIGHT = 0.2f;
     private static final float ENEMY_BIG_BULLET_HEIGHT = 0.04f;
@@ -37,9 +37,13 @@ public class EnemyGenerator {
     private float generateInterval = 4f;
     private float generateTimer;
 
-    private final TextureRegion[] enemySmallRegion;
-    private final TextureRegion[] enemyMediumRegion;
-    private final TextureRegion[] enemyBigRegion;
+    private final TextureRegion smallEnemy;
+    private final TextureRegion mediumEnemy;
+    private final TextureRegion bigEnemy;
+
+    private final TextureRegion smallEnemyDmg;
+    private final TextureRegion mediumEnemyDmg;
+    private final TextureRegion bigEnemyDmg;
 
     private final Vector2 enemySmallV = new Vector2(0f, -0.2f);
     private final Vector2 enemyMediumV = new Vector2(0f, -0.12f);
@@ -52,12 +56,13 @@ public class EnemyGenerator {
     public EnemyGenerator(Rect worldBounds, EnemyPool enemyPool, TextureAtlas atlas) {
         this.worldBounds = worldBounds;
         this.enemyPool = enemyPool;
-        TextureRegion textureRegion0 = atlas.findRegion("shipS" + Rnd.nextInt(1, 2));
-        this.enemySmallRegion = Regions.split(textureRegion0, 1, 1, 1);
-        TextureRegion textureRegion1 = atlas.findRegion("shipM");
-        this.enemyMediumRegion = Regions.split(textureRegion1, 1, 1, 1);
-        TextureRegion textureRegion2 = atlas.findRegion("shipL");
-        this.enemyBigRegion = Regions.split(textureRegion2, 1, 1, 1);
+        this.smallEnemy = atlas.findRegion("shipS" + Rnd.nextInt(1, 2));
+        this.mediumEnemy = atlas.findRegion("shipM");
+        this.bigEnemy = atlas.findRegion("shipL");
+        this.smallEnemyDmg = atlas.findRegion("shipS" + Rnd.nextInt(1, 2) + "Dmg");
+        this.mediumEnemyDmg = atlas.findRegion("shipMDmg");
+        this.bigEnemyDmg = atlas.findRegion("shipLDmg");
+
         this.bulletRegion = atlas.findRegion("rocket2");
     }
 
@@ -67,9 +72,10 @@ public class EnemyGenerator {
             generateTimer = 0f;
             Enemy enemy = enemyPool.obtain();
             float type = (float) Math.random();
-            if (type < 0.5f) {
+            if (type < 0.6f) {
                 enemy.set(
-                        enemySmallRegion,
+                        smallEnemy,
+                        smallEnemyDmg,
                         enemySmallV,
                         bulletRegion,
                         ENEMY_SMALL_BULLET_HEIGHT,
@@ -79,9 +85,10 @@ public class EnemyGenerator {
                         ENEMY_SMALL_HEIGHT,
                         ENEMY_SMALL_HP
                 );
-            } else if (type < 0.8) {
+            } else if (type < 0.85f) {
                 enemy.set(
-                        enemyMediumRegion,
+                        mediumEnemy,
+                        mediumEnemyDmg,
                         enemyMediumV,
                         bulletRegion,
                         ENEMY_MEDIUM_BULLET_HEIGHT,
@@ -93,7 +100,8 @@ public class EnemyGenerator {
                 );
             } else {
                 enemy.set(
-                        enemyBigRegion,
+                        bigEnemy,
+                        bigEnemyDmg,
                         enemyBigV,
                         bulletRegion,
                         ENEMY_BIG_BULLET_HEIGHT,

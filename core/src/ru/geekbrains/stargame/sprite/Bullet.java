@@ -14,7 +14,7 @@ public class Bullet extends Sprite {
     private Object owner;
 
     public Bullet() {
-        regions = new TextureRegion[1];
+        region = new TextureRegion();
     }
 
     public void set(
@@ -27,7 +27,7 @@ public class Bullet extends Sprite {
             int damage
     ) {
         this.owner = owner;
-        this.regions[0] = region;
+        this.region = region;
         this.pos.set(pos0);
         this.v.set(v0);
         setHeightProportion(height);

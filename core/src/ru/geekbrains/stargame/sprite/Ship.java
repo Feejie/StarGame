@@ -73,6 +73,7 @@ public abstract class Ship extends Sprite {
     public void damage(int damage) {
         hp -= damage;
         if (hp <= 0) {
+            hp = 0;
             destroy();
         }
         region = regionDamage;
@@ -80,11 +81,15 @@ public abstract class Ship extends Sprite {
     }
 
     protected void shoot() {
-        bulletSound.play(0.02f);
+        bulletSound.play(0.05f);
     }
 
     private void boom() {
         Explosion explosion = explosionPool.obtain();
         explosion.set(getHeight(), pos);
+    }
+
+    public int getHp() {
+        return hp;
     }
 }

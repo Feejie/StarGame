@@ -1,5 +1,6 @@
 package ru.geekbrains.stargame.base;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
@@ -12,6 +13,7 @@ public abstract class ScaledTouchButton extends Sprite {
 
     public ScaledTouchButton(TextureRegion region) {
         super(region);
+        this.region.getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
     }
 
     @Override
